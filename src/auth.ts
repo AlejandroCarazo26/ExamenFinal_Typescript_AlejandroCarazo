@@ -7,19 +7,19 @@ import { USER_COLLECTION } from "./utils";
 
 dotenv.config();
 
-const SUPER_SECRET = process.env.SUPER_SECRET;
+const SUPER_SECRET1= process.env.SUPER_SECRET;
 
 export const signToken = (userId: string) => {
     
-    if(!SUPER_SECRET) throw new Error("No hay secreto que produzca un token")
+    if(!SUPER_SECRET1) throw new Error("No hay secreto que produzca un token")
 
-    return jwt.sign({userId}, SUPER_SECRET!, {expiresIn: "1h"});
+    return jwt.sign({userId}, SUPER_SECRET1!, {expiresIn: "1h"});
 }
 
 export const verifyToken = (token: string) => {
     try{
-        if(!SUPER_SECRET) throw new Error("No hay secreto que produzca un token")
-        return jwt.verify(token, SUPER_SECRET!) as {userId : string};
+        if(!SUPER_SECRET1) throw new Error("No hay secreto que produzca un token")
+        return jwt.verify(token, SUPER_SECRET1!) as {userId : string};
     }
     catch(err){
         return null;

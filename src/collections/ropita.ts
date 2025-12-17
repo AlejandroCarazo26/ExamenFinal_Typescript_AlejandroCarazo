@@ -1,7 +1,6 @@
-import { Collection, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { getDb } from "../db/mongo"
 import { CLOTHING_COLLECTION } from "../utils";
-
 
 export const getRopita = async (page?: number, size?: number) => {
     const db = getDb();

@@ -1,7 +1,7 @@
 import { getDb } from "../db/mongo";
 import bcrypt from "bcryptjs"
 import { ObjectId } from "mongodb";
-import { CLOTHING_COLLECTION, USER_COLLECTION } from "../utils";
+import { USER_COLLECTION } from "../utils";
 import { getRopitaPorID } from "./ropita";
 
 
@@ -48,3 +48,9 @@ export const buyRopita = async (idDeRopa : string, userId: string) => {
 
 }
 
+
+
+// export const findUserById= async (id: string) => {
+//     const db = getDb();
+//     return await db.collection(COLLECTION).findOne({_id: new ObjectId(id)});
+// }

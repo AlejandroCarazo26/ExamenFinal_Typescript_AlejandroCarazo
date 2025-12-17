@@ -2,11 +2,12 @@ import {gql} from "apollo-server"
 
 export const typeDefs = gql`
 
-    type User{
+    type User {
         _id: ID!
         email: String!
         clothes: [Clothing]!
     }
+
 
     type Clothing {
         _id: ID!, 

@@ -8,6 +8,7 @@ import { createRopita, getRopasFromIDs, getRopita, getRopitaPorID } from "../col
 
 
 export const resolvers: IResolvers = {
+
     Query: {
 
         clothes: async(_, {page, size}) => {
@@ -26,7 +27,7 @@ export const resolvers: IResolvers = {
                 ...user
             }
         }
-        
+
     },
 
     Mutation: {
