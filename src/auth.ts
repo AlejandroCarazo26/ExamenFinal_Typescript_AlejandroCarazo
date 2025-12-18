@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { getDb } from "./db/mongo";
 import { ObjectId } from "mongodb";
 import dotenv from "dotenv";
-import { USER_COLLECTION } from "./utils";
+import { TRAINER_COLLECTION } from "./utils";
 
 
 dotenv.config();
@@ -33,7 +33,7 @@ export const getUserFromToken = async (token: string) => {
     if(!payload) return null;
 
     const db = getDb();
-    return await db.collection(USER_COLLECTION).findOne({
+    return await db.collection(TRAINER_COLLECTION).findOne({
         _id: new ObjectId (payload.userId)
     });
 }

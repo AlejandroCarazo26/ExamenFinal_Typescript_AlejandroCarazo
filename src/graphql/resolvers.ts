@@ -6,6 +6,7 @@ import { createPokemon, getPokemonById, getPokemons } from "../collections/pokem
 import { catchPokemonParaTrainer, freeOwnedPokemons } from "../collections/ownedpokemons";
 import { TRAINER_COLLECTION } from "../utils";
 import { ObjectId } from "mongodb";
+import { User } from "../types/users";
 
 
 export const resolvers: IResolvers = {
@@ -86,7 +87,7 @@ export const resolvers: IResolvers = {
 
 
     Trainer: {
-        pokemons: async (parent: Trainer) => {
+        pokemons: async (parent: User) => {
             const db = getDb();
 
             //return await getPokemonById(parent.pokemons);
