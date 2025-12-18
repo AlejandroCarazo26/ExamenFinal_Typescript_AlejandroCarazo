@@ -1,26 +1,27 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { getDb } from "../db/mongo";
-import { Collection, ObjectId } from "mongodb";
 import { signToken } from "../auth";
-import { validate } from "graphql";
-import { buyRopita, createUser, validateUser } from "../collections/users";
-import { createRopita, getRopasFromIDs, getRopita, getRopitaPorID } from "../collections/ropita";
+import { createTrainer, validateTrainer} from "../collections/trainers";
+import { createPokemon, getPokemonById, getPokemons } from "../collections/pokemon";
+import { catchPokemonParaTrainer, freeOwnedPokemons } from "../collections/ownedpokemons";
+import { TRAINER_COLLECTION } from "../utils";
+import { ObjectId } from "mongodb";
 
 
 export const resolvers: IResolvers = {
 
     Query: {
 
-        clothes: async(_, {page, size}) => {
-            return await getRopita(page, size);
+        pokemons: async(_, {page, size}) => {
+            return await getPokemons(page, size);
         },
 
-        clothing: async(_, {id}) => {
-            return await getRopitaPorID(id);
+        pokemon: async(_, {id}) => {
+            return await getPokemonById(id);
         },
 
         me: async(_, __, { user }) => {
-            if(!user) throw new Error ("Logeate o na de na");
+            if(!user) throw null;
             
             return {
                 _id: user._id.toString(),
@@ -32,39 +33,65 @@ export const resolvers: IResolvers = {
 
     Mutation: {
         
-        register: async(_, {email, password}: {email: string, password: string}) => {
-            const idDelClienteCreado = await createUser(email, password);
-            return signToken(idDelClienteCreado);
+        startJourney: async(_, {name, password}: {name: string, password: string}) => {
+            const idDelTrainerCreado = await createTrainer(name, password);
+            return signToken(idDelTrainerCreado);
         },
 
-        login: async(_, {email, password}: {email: string, password: string}) => {
-            const user = await validateUser(email, password);
+        login: async(_, {name, password}: {name: string, password: string}) => {
+            const user = await validateTrainer(name, password);
 
             if(!user) throw new Error("Esos credenciales son incorrectos");
             return signToken(user._id.toString());
         },
 
-        addClothing: async (_, {name, size, color, price}, { user }) =>{
-            if(!user) throw new Error("Tienes que estar logueado para añadir ropa")
+        createPokemon: async(_, {name, description, height, weight, types}, {user}) => {
+            if(!user) throw new Error ("Necesitas autenticarte para añadir un pokemon")
 
-            const db = getDb();
-            const result  = await createRopita(name, size, color, price);
+            return await createPokemon(name, description, height, weight, types)
 
-            return result;
+        
+        },
+
+        catchPokemon: async(_, {pokemonId, nickname}, {user}) => {
+            if(!user) throw new Error ("Tienes que estar logueado para capturar un Pokemon")
+
+            const ownedP = await catchPokemonParaTrainer(user._id.toString(), pokemonId, nickname);
+            return {_id: ownedP!._id.toString(), 
+                pokemonId: ownedP!.pokemonId,
+                nickname: ownedP!.nickname,
+                level: ownedP!.level
+            };
             
         },
 
-        buyClothing: async (_, {clothingId}, {user}) => {
-            if(!user) throw new Error("Tienes que estar logueado para comprar ropa")
 
-            return await buyRopita(clothingId, user._id);
+        freePokemon: async(_, {ownedPokemonId}, {user}) => {
+            if(!user) throw new Error ("Tienes que estar logueado para liberar un pokemon")
+        
+            await freeOwnedPokemons(user._id.toString(), ownedPokemonId);
+            const db = getDb();
+
+            const updatedTrainer = await db.collection(TRAINER_COLLECTION).findOne({_id: new ObjectId(user._id)})
+
+            return {
+                _id: updatedTrainer!._id.toString(),
+                name: updatedTrainer!.name, 
+                pokemons: updatedTrainer!.pokemons || []
+            };
+            
         }
+
     },
 
 
-    User: {
-        clothes: async (parent) => {
-            return await getRopasFromIDs(parent.clothes);
+    Trainer: {
+        pokemons: async (parent: Trainer) => {
+            const db = getDb();
+
+            //return await getPokemonById(parent.pokemons);
+
+
 
         }
     }

@@ -1,3 +1,4 @@
-export const dbName = "DBRepasoFinal"
-export const USER_COLLECTION = "users"
-export const CLOTHING_COLLECTION = "ropita"
+export const dbName = "BDFinal" //NO OLVIDARSE. Cambiarlo de base de datos cuando empiece el examen
+export const TRAINER_COLLECTION = "trainer"
+export const POKEMON_COLLECTION = "pokemon"
+export const OWNEDPOKEMON_COLLECTION = "owned"
