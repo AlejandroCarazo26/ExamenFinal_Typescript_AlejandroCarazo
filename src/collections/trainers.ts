@@ -9,14 +9,13 @@ export const createTrainer = async (name: string, password: string) => {
     const db = getDb();
     const passwordEncriptada = await bcrypt.hash(password, 10);
 
-    const exists = await db.collection(TRAINER_COLLECTION).findOne({ name });
+    const exists = await db.collection(TRAINER_COLLECTION).findOne({ name });                   
     if (exists) throw new Error("Ya existe un trainer con este nombre");
 
     else {
         const result = await db.collection(TRAINER_COLLECTION).insertOne({
         name, 
-        password: passwordEncriptada,
-        clothes: []
+        password: passwordEncriptada
     });
 
     return result.insertedId.toString();
@@ -24,9 +23,9 @@ export const createTrainer = async (name: string, password: string) => {
     
 }
 
-export const validateTrainer = async (email: string, password: string) => {
+export const validateTrainer = async (name: string, password: string) => {
     const db = getDb();
-    const user = await db.collection(TRAINER_COLLECTION).findOne({email});
+    const user = await db.collection(TRAINER_COLLECTION).findOne({name});
 
     if(!user) throw null;
 

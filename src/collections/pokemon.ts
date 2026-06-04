@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { getDb } from "../db/mongo";
 import { POKEMON_COLLECTION } from "../utils";
+import { PokemonType } from "../types/PokemonType";
  
 
 export const createPokemon= async( 

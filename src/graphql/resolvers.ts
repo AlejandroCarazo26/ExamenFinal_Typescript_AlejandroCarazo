@@ -3,10 +3,11 @@ import { getDb } from "../db/mongo";
 import { signToken } from "../auth";
 import { createTrainer, validateTrainer} from "../collections/trainers";
 import { createPokemon, getPokemonById, getPokemons } from "../collections/pokemon";
-import { catchPokemonParaTrainer, freeOwnedPokemons } from "../collections/ownedpokemons";
+import { catchPokemonParaTrainer, freeOwnedPokemons, getOwnedPokemonsByIds } from "../collections/ownedpokemons";
 import { TRAINER_COLLECTION } from "../utils";
 import { ObjectId } from "mongodb";
-import { User } from "../types/users";
+import { Trainer } from "../types/trainer";
+import { OwnedPokemon } from "../types/OwnedPokemon";
 
 
 export const resolvers: IResolvers = {
@@ -87,13 +88,20 @@ export const resolvers: IResolvers = {
 
 
     Trainer: {
-        pokemons: async (parent: User) => {
+        pokemons: async (parent) => {
             const db = getDb();
 
-            //return await getPokemonById(parent.pokemons);
-
-
+            return await getOwnedPokemonsByIds(parent.pokemons)
 
         }
+    },
+
+    OwnedPokemon: {
+        pokemon: async(parent: OwnedPokemon) => {
+            const db = getDb(); 
+
+            return await getPokemonById(parent.pokemon.toString())
+        }
+
     }
 }

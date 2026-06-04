@@ -1,6 +1,6 @@
 
 
-enum PokemonType {
+export enum PokemonType {
         NORMAL,
         FIRE,
         WATER,

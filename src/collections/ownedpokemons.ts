@@ -42,3 +42,16 @@ export const freeOwnedPokemons = async(trainerId: string, OwnedPokemonId: string
     })
 
 }
+
+export const getOwnedPokemonsByIds = async(ids: string[]) => {
+
+    const db = getDb();
+
+    return await db.collection(OWNEDPOKEMON_COLLECTION)
+        .find({
+            _id: {
+                $in: ids.map(id => new ObjectId(id))
+            }
+        })
+        .toArray();
+}

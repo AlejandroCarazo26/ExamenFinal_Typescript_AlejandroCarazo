@@ -1,6 +1,7 @@
+import { Pokemon } from "./Pokemon"
 
 
-type OwnedPokemon = {
+export type OwnedPokemon = {
         _id?: string,
         //En base datos se guardará solo el id, encadenado pokemon.
         pokemon: Pokemon

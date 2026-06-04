@@ -1,6 +1,7 @@
+import { PokemonType } from "./PokemonType"
 
 
-type Pokemon = {
+export type Pokemon = {
         _id?: string,
         name: string,
         description: string,
