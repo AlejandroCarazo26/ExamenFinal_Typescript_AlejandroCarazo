@@ -10,20 +10,23 @@ export const catchPokemonParaTrainer = async (trainerId: string, pokemonId: stri
     const db = getDb();
 
     const mipokemon = await db.collection(POKEMON_COLLECTION).findOne({_id: new ObjectId(pokemonId)});
-    if(!mipokemon) throw new Error ("No se ha encontrado dichon pokemon");
+    if(!mipokemon) throw new Error ("No se ha encontrado dicho pokemon");
 
     const result = await db.collection(OWNEDPOKEMON_COLLECTION).insertOne({
-
-        trainerId, 
-        pokemonId, 
+        pokemon: pokemonId,
         nickname: nickname || mipokemon.name,
-        level: 1,
+        attack: Math.floor(Math.random()*100)+1,
+        defense: Math.floor(Math.random()*100)+1,
+        speed: Math.floor(Math.random()*100)+1,
+        special: Math.floor(Math.random()*100)+1,
+        level: Math.floor(Math.random()*100)+1
     });
 
     const ownedId = result.insertedId.toString();
 
     await db.collection(TRAINER_COLLECTION).updateOne(
-        {_id: new ObjectId(trainerId)}, {$addToSet: {pokemons: ownedId}}
+        {_id: new ObjectId(trainerId)},
+        {$addToSet: {pokemons: ownedId}}
     );
 
     return await db.collection(OWNEDPOKEMON_COLLECTION).findOne({_id: new ObjectId(ownedId)});

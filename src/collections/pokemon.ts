@@ -39,6 +39,11 @@ export const getPokemons = async (page?: number, size?: number) => {
 export const getPokemonById = async(id: string) => {
     const db = getDb();
 
-    return await db.collection(POKEMON_COLLECTION).findOne({_id: new ObjectId(id),});
+    const pokemon = await db.collection(POKEMON_COLLECTION).findOne({_id: new ObjectId(id),});
 
+    if(!pokemon){
+        throw new Error("No se ha podido identificar un Pokemon con este ID")
+    }
+
+    return pokemon;
 }

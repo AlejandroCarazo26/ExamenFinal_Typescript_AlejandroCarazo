@@ -6,7 +6,6 @@ import { createPokemon, getPokemonById, getPokemons } from "../collections/pokem
 import { catchPokemonParaTrainer, freeOwnedPokemons, getOwnedPokemonsByIds } from "../collections/ownedpokemons";
 import { TRAINER_COLLECTION } from "../utils";
 import { ObjectId } from "mongodb";
-import { Trainer } from "../types/trainer";
 import { OwnedPokemon } from "../types/OwnedPokemon";
 
 
@@ -59,9 +58,14 @@ export const resolvers: IResolvers = {
             if(!user) throw new Error ("Tienes que estar logueado para capturar un Pokemon")
 
             const ownedP = await catchPokemonParaTrainer(user._id.toString(), pokemonId, nickname);
-            return {_id: ownedP!._id.toString(), 
-                pokemonId: ownedP!.pokemonId,
+            return {
+                _id: ownedP!._id.toString(), 
+                pokemon: ownedP!.pokemon,
                 nickname: ownedP!.nickname,
+                attack: ownedP!.attack,
+                defense: ownedP!.defense,
+                speed: ownedP!.speed,
+                special: ownedP!.special,
                 level: ownedP!.level
             };
             
